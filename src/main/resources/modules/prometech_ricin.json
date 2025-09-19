@@ -1,0 +1,174 @@
+{
+  "name": "My Multi-Symptom Disease",
+  "gmfVersion": "1.0",
+  "specialty": "general",
+  "remarks": [
+    "Samples multiple symptoms probabilistically and adds conditional observations."
+  ],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "direct_transition": "Disease Onset",
+      "name": "Initial"
+    },
+    "Disease Onset": {
+      "type": "Simple",
+      "assign_to_attribute": "my_disease",
+      "codes": [
+        {
+          "system": "snomed",
+          "code": "123456789",
+          "display": "My Disease",
+          "value_set": ""
+        }
+      ],
+      "direct_transition": "Sample Symptoms",
+      "name": "Disease Onset"
+    },
+    "Sample Symptoms": {
+      "type": "MultiSymptom",
+      "symptoms": [
+        {
+          "name": "Fever",
+          "probability": 0.3,
+          "codes": [
+            {
+              "system": "snomed",
+              "code": "386661006",
+              "display": "Fever"
+            }
+          ]
+        },
+        {
+          "name": "Cough",
+          "probability": 0.5,
+          "codes": [
+            {
+              "system": "snomed",
+              "code": "49727002",
+              "display": "Cough"
+            }
+          ]
+        },
+        {
+          "name": "Fatigue",
+          "probability": 0.8,
+          "codes": [
+            {
+              "system": "snomed",
+              "code": "84229001",
+              "display": "Fatigue"
+            }
+          ]
+        }
+      ],
+      "direct_transition": "Check Fever",
+      "name": "Sample Symptoms"
+    },
+    "Check Fever": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Symptom",
+            "symptom": "Fever",
+            "operator": ">",
+            "value": 0
+          },
+          "transition": "Fever Observation"
+        },
+        {
+          "transition": "Check Cough"
+        }
+      ],
+      "name": "Check Fever"
+    },
+    "Fever Observation": {
+      "type": "Observation",
+      "codes": [
+        {
+          "system": "loinc",
+          "code": "8310-5",
+          "display": "Body temperature",
+          "value_set": ""
+        }
+      ],
+      "value": 101.5,
+      "unit": "F",
+      "direct_transition": "Check Cough",
+      "name": "Fever Observation"
+    },
+    "Check Cough": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Symptom",
+            "symptom": "Cough",
+            "operator": ">",
+            "value": 0
+          },
+          "transition": "Cough Observation"
+        },
+        {
+          "transition": "Check Fatigue"
+        }
+      ],
+      "name": "Check Cough"
+    },
+    "Cough Observation": {
+      "type": "Observation",
+      "category": "exam",
+      "codes": [
+        {
+          "system": "loinc",
+          "code": "75791-5",
+          "display": "Cough severity",
+          "value_set": ""
+        }
+      ],
+      "value": 3,
+      "unit": "scale",
+      "direct_transition": "Check Fatigue",
+      "name": "Cough Observation"
+    },
+    "Check Fatigue": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Symptom",
+            "symptom": "Fatigue",
+            "operator": ">",
+            "value": 0
+          },
+          "transition": "Fatigue Observation"
+        },
+        {
+          "transition": "Terminal"
+        }
+      ],
+      "name": "Check Fatigue"
+    },
+    "Fatigue Observation": {
+      "type": "Observation",
+      "codes": [
+        {
+          "system": "loinc",
+          "code": "41977-7",
+          "display": "Fatigue severity",
+          "value_set": ""
+        }
+      ],
+      "value": 7,
+      "unit": "scale",
+      "direct_transition": "Terminal",
+      "name": "Fatigue Observation"
+    },
+    "Terminal": {
+      "type": "Terminal",
+      "name": "Terminal"
+    }
+  },
+  "gmf_version": 2
+}

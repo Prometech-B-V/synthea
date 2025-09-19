@@ -1,16 +1,15 @@
 package org.mitre.synthea.engine;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -2573,6 +2572,72 @@ public abstract class State implements Cloneable, Serializable {
         entry.codes.add(code);
       }
       entry.series = this.series;
+      return true;
+    }
+  }
+
+  public static class MultiSymptom extends State {
+    private List<SymptomProb> symptoms;
+
+    public static class SymptomProb {
+      public String name;
+      public double probability;
+      public List<HealthRecord.Code> codes;
+
+
+      public SymptomProb(String name, double probability, List<HealthRecord.Code> codes) {
+        this.name = name;
+        this.probability = probability;
+        this.codes = codes;
+      }
+    }
+
+    @Override
+    protected void initialize(Module module, String name, JsonObject definition) {
+      super.initialize(module, name, definition);
+      this.symptoms = new LinkedList<>();
+      JsonArray symptomsArray = definition.getAsJsonArray("symptoms");
+      if (symptomsArray != null) {
+        for (JsonElement elem : symptomsArray) {
+          JsonObject symptomObj = elem.getAsJsonObject();
+          String symptomName = symptomObj.get("name").getAsString();
+          double probability = symptomObj.get("probability").getAsDouble();
+
+          List<HealthRecord.Code> codes = new LinkedList<>();
+          JsonArray codesArray = symptomObj.getAsJsonArray("codes");
+          if (codesArray != null) {
+            for (JsonElement codeElem : codesArray) {
+              JsonObject codeObj = codeElem.getAsJsonObject();
+              String system = codeObj.get("system").getAsString();
+              String code = codeObj.get("code").getAsString();
+              String display = codeObj.has("display") ? codeObj.get("display").getAsString() : null;
+              codes.add(new HealthRecord.Code(system, code, display));
+            }
+          }
+          symptoms.add(new SymptomProb(symptomName, probability, codes));
+        }
+      }
+    }
+
+    @Override
+    public MultiSymptom clone() {
+      MultiSymptom clone = (MultiSymptom) super.clone();
+      return clone;
+    }
+
+    @Override
+    public boolean process(Person person, long time) {
+      RandomValueGenerator random = new RandomValueGenerator(person, 0, 1);
+
+      for (SymptomProb sym : symptoms) {
+        boolean occurs = random.getValue(time) < sym.probability;
+
+        if (occurs) {
+          // TODO: Fix severity
+          person.setSymptom(module.name, module.name, sym.name, time, 100, false);
+        }
+      }
+
       return true;
     }
   }
