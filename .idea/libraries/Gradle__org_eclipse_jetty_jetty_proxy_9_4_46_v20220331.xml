@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.eclipse.jetty:jetty-proxy:9.4.46.v20220331" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.eclipse.jetty" artifactId="jetty-proxy" version="9.4.46.v20220331" baseVersion="9.4.46.v20220331" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-proxy/9.4.46.v20220331/a4e42c9a85a9c3d75b458028ba9d32fac4dd374f/jetty-proxy-9.4.46.v20220331.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

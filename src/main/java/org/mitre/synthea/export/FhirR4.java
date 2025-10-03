@@ -3476,4 +3476,12 @@ public class FhirR4 {
       return "urn:uuid:";
     }
   }
+
+  private void processLocations(Bundle bundle, Person person) {
+    for (var location : person.locations) {
+      org.hl7.fhir.r4.model.Location location1 = new org.hl7.fhir.r4.model.Location();
+      location1.addType(new CodeableConcept().setText(location.label));
+      bundle.addEntry(location1);
+    }
+  }
 }

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.sbml.jsbml.modules:jsbml-tidy:1.6.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.sbml.jsbml.modules" artifactId="jsbml-tidy" version="1.6.1" baseVersion="1.6.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.sbml.jsbml.modules/jsbml-tidy/1.6.1/1a981cb61e0d48bd1fec688df7e9ff58b1d11b94/jsbml-tidy-1.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

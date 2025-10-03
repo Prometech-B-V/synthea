@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: ca.uhn.hapi.fhir:hapi-fhir-converter:6.1.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="ca.uhn.hapi.fhir" artifactId="hapi-fhir-converter" version="6.1.0" baseVersion="6.1.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ca.uhn.hapi.fhir/hapi-fhir-converter/6.1.0/5501651d0c9c0b8c9d8b5da92229b33e277d7413/hapi-fhir-converter-6.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

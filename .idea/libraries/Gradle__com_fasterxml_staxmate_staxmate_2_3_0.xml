@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.fasterxml.staxmate:staxmate:2.3.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.fasterxml.staxmate" artifactId="staxmate" version="2.3.0" baseVersion="2.3.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.staxmate/staxmate/2.3.0/ca594c0c89c0a60f99d7eaf0ae3df899cd30037e/staxmate-2.3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

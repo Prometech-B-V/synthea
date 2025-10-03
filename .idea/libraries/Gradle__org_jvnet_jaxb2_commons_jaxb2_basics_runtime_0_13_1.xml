@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jvnet.jaxb2_commons:jaxb2-basics-runtime:0.13.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.jvnet.jaxb2_commons" artifactId="jaxb2-basics-runtime" version="0.13.1" baseVersion="0.13.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jvnet.jaxb2_commons/jaxb2-basics-runtime/0.13.1/275c5d608e7f4433e2fc8a927c290612bfb69194/jaxb2-basics-runtime-0.13.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

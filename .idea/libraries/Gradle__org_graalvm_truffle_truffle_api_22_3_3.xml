@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.graalvm.truffle:truffle-api:22.3.3" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.graalvm.truffle" artifactId="truffle-api" version="22.3.3" baseVersion="22.3.3" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.graalvm.truffle/truffle-api/22.3.3/711f4d7f08ef92f62412497a53ef7844ff522a41/truffle-api-22.3.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

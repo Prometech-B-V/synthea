@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: info.cqframework:model:2.1.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="info.cqframework" artifactId="model" version="2.1.0" baseVersion="2.1.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/info.cqframework/model/2.1.0/59acab37c6521f8571964336d9a33b47841b3e11/model-2.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

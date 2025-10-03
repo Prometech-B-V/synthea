@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.biojava:biojava-ontology:6.0.4" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.biojava" artifactId="biojava-ontology" version="6.0.4" baseVersion="6.0.4" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.biojava/biojava-ontology/6.0.4/508106a865de76802fa5debc8fcd3ec3adfa2c2a/biojava-ontology-6.0.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: xpp3:xpp3_xpath:1.1.4c" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="xpp3" artifactId="xpp3_xpath" version="1.1.4c" baseVersion="1.1.4c" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/xpp3/xpp3_xpath/1.1.4c/e203cc104f0bd203bebc823e577d7b922c074add/xpp3_xpath-1.1.4c.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.sbml.jsbml.ext:jsbml-comp:1.6.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.sbml.jsbml.ext" artifactId="jsbml-comp" version="1.6.1" baseVersion="1.6.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.sbml.jsbml.ext/jsbml-comp/1.6.1/cc373247ff70abd28d1f1ffe6e474e2716d290ed/jsbml-comp-1.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

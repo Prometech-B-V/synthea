@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.helger:ph-collection:9.5.3" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.helger" artifactId="ph-collection" version="9.5.3" baseVersion="9.5.3" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.helger/ph-collection/9.5.3/90e10b9eda9ad8cd01537b93b5658afd07f75845/ph-collection-9.5.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

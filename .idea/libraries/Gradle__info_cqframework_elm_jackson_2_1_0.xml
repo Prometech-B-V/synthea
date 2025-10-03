@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: info.cqframework:elm-jackson:2.1.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="info.cqframework" artifactId="elm-jackson" version="2.1.0" baseVersion="2.1.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/info.cqframework/elm-jackson/2.1.0/46c0978b25d7b0112d8ae1424bb6d38d4941b65/elm-jackson-2.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

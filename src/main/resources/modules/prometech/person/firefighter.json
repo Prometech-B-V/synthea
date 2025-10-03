@@ -1,0 +1,23 @@
+{
+  "name": "Mobility",
+  "remarks": ["Generates daily POI visits for patients"],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "direct_transition": "VisitPOI"
+    },
+    "VisitPOI": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "random",
+        "name": "Albert Heijn",
+        "label": "supermarket"
+      },
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  }
+}

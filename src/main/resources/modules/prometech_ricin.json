@@ -52,7 +52,7 @@
         },
         {
           "name": "Fatigue",
-          "probability": 0.8,
+          "probability": 1,
           "codes": [
             {
               "system": "snomed",

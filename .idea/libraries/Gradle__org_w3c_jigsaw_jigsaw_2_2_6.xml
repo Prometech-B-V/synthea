@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.w3c.jigsaw:jigsaw:2.2.6" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.w3c.jigsaw" artifactId="jigsaw" version="2.2.6" baseVersion="2.2.6" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.w3c.jigsaw/jigsaw/2.2.6/3aad62e34475bd390f71686e08ba7c6aab1210c2/jigsaw-2.2.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

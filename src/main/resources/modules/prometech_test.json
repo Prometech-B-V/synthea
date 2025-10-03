@@ -1,0 +1,163 @@
+{
+  "name": "CastorBeanIntoxication",
+  "gmf_version": 2,
+  "specialty": "general",
+  "remarks": [
+    "Models castor bean intoxication with GI symptoms and timestamps based on onset ranges from the provided paper (15 min to 10 hours for initial symptoms, with diarrhea potentially delayed; presentation often 12-24 hours post-ingestion). Symptoms include abdominal pain, vomiting, diarrhea, and fatigue/weakness."
+  ],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "direct_transition": "Wait_until"
+    },
+    "Wait_until": {
+      "type": "WaitUntil",
+      "time": {
+        "date": "2025-10-02T12:48:00Z"
+      },
+      "direct_transition": "Visit_location"
+    },
+    "Visit_location": {
+      "type": "CallSubmodule",
+      "submodule": "prometech/person/firefighter",
+      "direct_transition": "Ingestion"
+    },
+    "Ingestion": {
+      "type": "ConditionOnset",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "216487004",
+          "display": "Accidental poisoning by plants"
+        }
+      ],
+      "direct_transition": "Onset_Delay"
+    },
+    "Onset_Delay": {
+      "type": "Delay",
+      "range": {
+        "low": 0.25,
+        "high": 10,
+        "unit": "hours"
+      },
+      "direct_transition": "Abdominal_Pain_Symptom"
+    },
+    "Abdominal_Pain_Symptom": {
+      "type": "Symptom",
+      "symptom": "abdominal pain",
+      "severity": 70,
+      "direct_transition": "Abdominal_Pain_Observation"
+    },
+    "Abdominal_Pain_Observation": {
+      "type": "Observation",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "44833-2",
+          "display": "Abdominal pain severity",
+          "value_set": ""
+        }
+      ],
+      "value": 7,
+      "unit": "scale",
+      "direct_transition": "Vomiting_Symptom"
+    },
+    "Vomiting_Symptom": {
+      "type": "Symptom",
+      "symptom": "vomiting",
+      "severity": 80,
+      "direct_transition": "Vomiting_Observation"
+    },
+    "Vomiting_Observation": {
+      "type": "Observation",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "28540-3",
+          "display": "Vomiting [Presence]",
+          "value_set": ""
+        }
+      ],
+      "value": "Present",
+      "unit": "scale",
+      "direct_transition": "Fatigue_Symptom"
+    },
+    "Fatigue_Symptom": {
+      "type": "Symptom",
+      "symptom": "fatigue",
+      "severity": 70,
+      "direct_transition": "Fatigue_Observation"
+    },
+    "Fatigue_Observation": {
+      "type": "Observation",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "41977-7",
+          "display": "Fatigue severity [Reported]",
+          "value_set": ""
+        }
+      ],
+      "value": 7,
+      "unit": "scale",
+      "direct_transition": "Diarrhea_Delay"
+    },
+    "Diarrhea_Delay": {
+      "type": "Delay",
+      "range": {
+        "low": 0.5,
+        "high": 8,
+        "unit": "hours"
+      },
+      "direct_transition": "Diarrhea_Symptom"
+    },
+    "Diarrhea_Symptom": {
+      "type": "Symptom",
+      "symptom": "diarrhea",
+      "severity": 80,
+      "direct_transition": "Diarrhea_Observation"
+    },
+    "Diarrhea_Observation": {
+      "type": "Observation",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "29746-5",
+          "display": "Diarrhea [Presence]",
+          "value_set": ""
+        }
+      ],
+      "value": "Present",
+      "unit": "score",
+      "direct_transition": "Presentation_Delay"
+    },
+    "Presentation_Delay": {
+      "type": "Delay",
+      "range": {
+        "low": 4,
+        "high": 20,
+        "unit": "hours"
+      },
+      "direct_transition": "ED_Encounter"
+    },
+    "ED_Encounter": {
+      "type": "Encounter",
+      "encounter_class": "emergency",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "50849002",
+          "display": "Emergency room admission"
+        }
+      ],
+      "direct_transition": "End_Encounter"
+    },
+    "End_Encounter": {
+      "type": "EncounterEnd",
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  }
+}

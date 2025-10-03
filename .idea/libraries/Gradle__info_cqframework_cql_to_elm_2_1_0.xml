@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: info.cqframework:cql-to-elm:2.1.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="info.cqframework" artifactId="cql-to-elm" version="2.1.0" baseVersion="2.1.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/info.cqframework/cql-to-elm/2.1.0/7c5f6cb969d2afe2aaa2ca3ae5b9b3dc3c79f54/cql-to-elm-2.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

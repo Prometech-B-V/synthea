@@ -310,6 +310,17 @@ task physiology(type: JavaExec) {
     mainClass = "org.mitre.synthea.engine.PhysiologySimulator"
 }
 
+task simulate(type: JavaExec) {
+  group 'Application'
+  description 'Run org.mitre.synthea.simulator.Simulate'
+  classpath sourceSets.main.runtimeClasspath
+  mainClass = "org.mitre.synthea.simulator.Simulate"
+  // Support passing args: ./gradlew simulate -Params="['arg1','arg2']"
+  if (project.hasProperty("arams")) {
+    args Eval.me(arams)
+  }
+}
+
 task versionTxt() {
   group 'Build'
   description 'Generates a version file.'

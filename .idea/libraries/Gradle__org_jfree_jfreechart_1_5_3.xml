@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jfree:jfreechart:1.5.3" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.jfree" artifactId="jfreechart" version="1.5.3" baseVersion="1.5.3" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jfree/jfreechart/1.5.3/26c6d7143d8a905a54c7e2296cea6ce4c5ecb417/jfreechart-1.5.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

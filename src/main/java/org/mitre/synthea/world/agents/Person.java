@@ -39,6 +39,8 @@ import org.mitre.synthea.world.concepts.HealthRecord.EncounterType;
 import org.mitre.synthea.world.concepts.VitalSign;
 import org.mitre.synthea.world.concepts.healthinsurance.CoverageRecord;
 import org.mitre.synthea.world.concepts.healthinsurance.InsurancePlan;
+import org.mitre.synthea.world.geography.Location;
+import org.mitre.synthea.world.geography.PointOfInterest;
 import org.mitre.synthea.world.geography.quadtree.QuadTreeElement;
 
 /**
@@ -241,6 +243,7 @@ public class Person implements Serializable, RandomNumberGenerator, QuadTreeElem
   public List<State> history;
   /** Record of insurance coverage. */
   public final CoverageRecord coverage;
+  public List<PointOfInterest> locations = new ArrayList<>();
 
   /**
    * Person constructor.

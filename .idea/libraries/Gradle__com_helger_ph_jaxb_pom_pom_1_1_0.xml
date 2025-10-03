@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.helger:ph-jaxb-pom:pom:1.1.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.helger" artifactId="ph-jaxb-pom" version="1.1.0" baseVersion="1.1.0" />
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.helger/ph-jaxb-pom/1.1.0/e4b9f629a1b5bada6b026458b755a043f2df50de/ph-jaxb-pom-1.1.0.pom" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
