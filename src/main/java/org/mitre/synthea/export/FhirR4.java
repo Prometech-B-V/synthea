@@ -505,6 +505,8 @@ public class FhirR4 {
       }
     }
 
+    processLocations(bundle, person);
+
     if (USE_US_CORE_IG && shouldExport(Provenance.class)) {
       // Add Provenance to the Bundle
       provenance(bundle, person, stopTime);
@@ -3477,11 +3479,58 @@ public class FhirR4 {
     }
   }
 
-  private void processLocations(Bundle bundle, Person person) {
-    for (var location : person.locations) {
-      org.hl7.fhir.r4.model.Location location1 = new org.hl7.fhir.r4.model.Location();
-      location1.addType(new CodeableConcept().setText(location.label));
-      bundle.addEntry(location1);
+  protected static void processLocations(Bundle bundle, Person person) {
+    for (var loc : person.locations) {
+      org.hl7.fhir.r4.model.Location locationResource = new org.hl7.fhir.r4.model.Location();
+      // attach US Core profile if enabled
+      if (USE_US_CORE_IG) {
+        Meta meta = new Meta();
+        meta.addProfile("http://hl7.org/fhir/us/core/StructureDefinition/us-core-location");
+        locationResource.setMeta(meta);
+      }
+      locationResource.setStatus(LocationStatus.ACTIVE);
+      // use the label for name/description/type
+      if (loc.label != null && !loc.label.isEmpty()) {
+        locationResource.setName(loc.name);
+        locationResource.setDescription(loc.label);
+        locationResource.addType(new CodeableConcept().setText(loc.label));
+      }
+      // record latitude and longitude when available
+//      if (loc.latitude != null && loc.longitude != null) {
+//        Location.PositionComponent position = new Location.PositionComponent();
+//        position.setLatitude(loc.latitude);
+//        position.setLongitude(loc.longitude);
+//        locationResource.setPosition(position);
+//      }
+      // attach a period extension if start/end times are present
+      boolean hasStart = (loc.startTime != 0);
+      boolean hasEnd = (loc.endTime != 0);
+      if (hasStart || hasEnd) {
+        Period period = new Period();
+        if (hasStart) period.setStart(new Date(loc.startTime));
+        if (hasEnd) period.setEnd(new Date(loc.endTime));
+        Extension periodExtension = new Extension(
+                "http://synthea.mitre.org/fhir/StructureDefinition/location-period",
+                period);
+        locationResource.addExtension(periodExtension);
+      }
+
+      if (loc.properties != null) {
+        for (Map.Entry<String, JsonElement> entry : loc.properties.entrySet()) {
+          String key = entry.getKey();
+          String value = entry.getValue().isJsonNull() ? "" : entry.getValue().getAsString();
+          Extension propExtension = new Extension(
+                  "http://synthea.mitre.org/fhir/StructureDefinition/geojson-property-" + key,
+                  new StringType(value)
+          );
+          locationResource.addExtension(propExtension);
+        }
+      }
+
+      // generate a deterministic ID and add to the bundle
+      long keyTime = (loc.startTime != 0) ? loc.startTime : System.currentTimeMillis();
+      String id = ExportHelper.buildUUID(person, keyTime, "Location " + loc.label);
+      newEntry(bundle, locationResource, id);
     }
   }
 }

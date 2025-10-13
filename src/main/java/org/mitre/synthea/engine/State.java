@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math.ode.DerivativeException;
@@ -48,7 +49,6 @@ import org.mitre.synthea.world.concepts.HealthRecord.EncounterType;
 import org.mitre.synthea.world.concepts.HealthRecord.Entry;
 import org.mitre.synthea.world.concepts.HealthRecord.Medication;
 import org.mitre.synthea.world.concepts.HealthRecord.Report;
-import org.mitre.synthea.world.geography.PointOfInterest;
 import org.simulator.math.odes.MultiTable;
 
 /**
@@ -2914,30 +2914,42 @@ public abstract class State implements Cloneable, Serializable {
 
         @Override
         public long endOfDelay(long time, Person person) {
-            return this.time.toEpochMilli() - time;
+            return this.time.toEpochMilli();
         }
     }
 
     /*
-    {
-      "type": "PointOfInterest",
-      "contaminated": if the area is a contamination zone, defaults to false
-      "config": {
-        "type": random | input can be random, or specific location provided by hand.
-        "file_path": location of the dataset that is used
-        // If random, you can config the following parameters
-        "label": the label the location should have
-        // input
-        "name": the name of the location
-        "label": the label of the location
-      }
-    }
-     */
+ {
+   "type": "PointOfInterest",
+   "contaminated": if the area is a contamination zone, defaults to false
+   "config": {
+     "type": "random" | "input", // can be random, or specific location provided by hand
+     "file_path": location of the dataset that is used
+     "properties": {}, // key-value pairs to filter GeoJSON features when type is random
+     // If random, you can config the following parameters
+     "label": the label the location should have (optional, used as fallback)
+     // input
+     "name": the name of the location
+     "label": the label of the location
+     // Time stuff absolute values
+     "start_time": { "value": 6, "unit": "hours" },
+     "duration": { "value": 8, "unit": "hours" },
+     // Time stuff ranges
+     "start_time": { "min": 1, "max": 3, "unit": "hours" },
+     "duration": { "min": 10, "max": 40, "unit": "minutes" }
+   }
+ }
+ */
     public static class PointOfInterest extends State {
         private String type;
         private String label;
         private String poiName;
-        private boolean contaminated = false;
+        private Boolean contaminated = false;
+        private Boolean hasTiming;
+        private JsonObject properties; // Store the properties to filter on
+
+        private JsonObject startConfig;
+        private JsonObject durationConfig;
 
         @Override
         protected void initialize(Module module, String name, JsonObject definition) {
@@ -2958,51 +2970,141 @@ public abstract class State implements Cloneable, Serializable {
             }
 
             this.type = config.get("type").getAsString();
-            this.label = config.get("label").getAsString();
+            this.label = config.has("label") ? config.get("label").getAsString() : null;
 
             if (this.type.equals("input")) {
+                if (!config.has("name")) {
+                    throw new IllegalArgumentException("PointOfInterest config for type 'input' must have a name");
+                }
                 this.poiName = config.get("name").getAsString();
+            } else if (this.type.equals("random")) {
+                if (config.has("properties")) {
+                    this.properties = config.getAsJsonObject("properties");
+                }
+            } else {
+                throw new IllegalArgumentException("PointOfInterest state type must be 'random' or 'input'");
+            }
+
+            if (config.has("start_time")) {
+                this.startConfig = config.get("start_time").getAsJsonObject();
+                this.hasTiming = true;
+            }
+
+            if (config.has("duration")) {
+                this.durationConfig = config.get("duration").getAsJsonObject();
+                this.hasTiming = true;
             }
         }
-
+        // TODO: Fix the labels and the description when creating the point of interest.
         @Override
         public boolean process(Person person, long time) {
-            List<LinkedHashMap<String, String>> data;
+            JsonObject data;
             try {
-                String csvData = Utilities.readResource("geography/debug.csv");
-                csvData = csvData.replace(";", ",");
-                data = SimpleCSV.parse(csvData);
+                // Instead of dealing with CSV we expect geojson
+                String jsonText = Utilities.readResource("geography/export.geojson");
+                Gson gson = Utilities.getGson();
+                data = gson.fromJson(jsonText, JsonObject.class);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
+            org.mitre.synthea.world.geography.PointOfInterest poi;
+
+            JsonArray poiArray = data.getAsJsonArray("features");
 
             if (this.type.equals("random")) {
                 String label;
                 String name;
-                if (this.label == null) {
-                    int randInt = person.randInt(data.size());
-                    LinkedHashMap<String, String> poi = data.get(randInt);
-                    label = poi.get("label");
-                    name = poi.get("name");
+                JsonArray filtered;
+
+                if (this.properties != null && !this.properties.entrySet().isEmpty()) {
+                    // Filter based on properties specified in config
+                    filtered = StreamSupport.stream(poiArray.spliterator(), false)
+                            .map(JsonElement::getAsJsonObject)
+                            .filter(obj -> {
+                                JsonObject featureProps = obj.getAsJsonObject("properties");
+                                if (featureProps == null) {
+                                    return false;
+                                }
+
+                                // Check if all specified properties match
+                                for (Map.Entry<String, JsonElement> entry : this.properties.entrySet()) {
+                                    String key = entry.getKey();
+                                    String expectedValue = entry.getValue().getAsString();
+                                    if (!featureProps.has(key) || !featureProps.get(key).getAsString().equals(expectedValue)) {
+                                        return false;
+                                    }
+                                }
+                                return true;
+                            })
+                            .collect(JsonArray::new, JsonArray::add, JsonArray::addAll);
                 } else {
-                    List<LinkedHashMap<String, String>> filteredData = data.stream().filter(x -> x.get("label").equals(this.label)).collect(Collectors.toList());
-                    int randInt = person.randInt(filteredData.size());
-                    LinkedHashMap<String, String> poi = filteredData.get(randInt);
-                    label = poi.get("label");
-                    name = poi.get("name");
+                    // Fallback to random selection if no properties are specified
+                    filtered = poiArray;
                 }
 
-                person.locations.add(new org.mitre.synthea.world.geography.PointOfInterest(
-                        name, label
-                ));
+                if (filtered.isEmpty()) {
+                    throw new RuntimeException("No POI found matching properties: " + (this.properties != null ? this.properties.toString() : "none"));
+                }
+
+                int randInt = person.randInt(filtered.size());
+                JsonObject dataPoint = filtered.get(randInt).getAsJsonObject();
+                JsonObject properties = dataPoint.getAsJsonObject("properties");
+
+                if (this.label != null) {
+                    label = this.label;
+                } else if (properties.has("amenity")) {
+                    label = properties.get("amenity").getAsString();
+                } else if (properties.has("building")) {
+                    label = properties.get("building").getAsString();
+                } else {
+                    label = "unknown";
+                }
+
+                if (properties.has("name")) {
+                    name = properties.get("name").getAsString();
+                } else {
+                    name = "unknown";
+                }
+
+                poi = new org.mitre.synthea.world.geography.PointOfInterest(
+                        name, label, this.contaminated, properties
+                );
             } else if (this.type.equals("input")) {
-                person.locations.add(new org.mitre.synthea.world.geography.PointOfInterest(
-                        this.poiName, this.label
-                ));
+                poi = new org.mitre.synthea.world.geography.PointOfInterest(
+                        this.poiName, this.label, this.contaminated, properties
+                );
+            } else {
+                throw new IllegalArgumentException("PointOfInterest state type must be 'random' or 'input'");
             }
 
+            if (this.hasTiming) {
+                if (this.startConfig != null) {
+                    poi.startTime = time + this.timeInput(person, this.startConfig);
+                } else {
+                    poi.startTime = time;
+                }
+                poi.endTime = poi.startTime + this.timeInput(person, this.durationConfig);
+            }
+
+            person.locations.add(poi);
+
             return true;
+        }
+
+        private long timeInput(Person person, JsonObject object) {
+            double value;
+            if (object.has("value")) {
+                value = object.get("value").getAsDouble();
+            } else if (object.has("min") && object.has("max")) {
+                int min = object.get("min").getAsInt();
+                int max = object.get("max").getAsInt();
+                value = person.rand(min, max);
+            } else {
+                throw new IllegalArgumentException("Time configuration must have a value, or a min and max!");
+            }
+
+            return Utilities.convertTime(object.get("unit").getAsString(), value);
         }
     }
 }

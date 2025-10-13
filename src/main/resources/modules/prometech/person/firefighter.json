@@ -4,18 +4,33 @@
   "states": {
     "Initial": {
       "type": "Initial",
-      "direct_transition": "VisitPOI"
+      "direct_transition": "VisitRestaurant"
     },
-    "VisitPOI": {
+    "VisitRestaurant": {
       "type": "PointOfInterest",
       "contaminated": "true",
       "config": {
         "type": "random",
-        "name": "Albert Heijn",
-        "label": "supermarket"
+        "properties": {
+          "building": "house"
+        },
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
       },
       "direct_transition": "Terminal"
     },
+//    "VisitApartment": {
+//      "type": "PointOfInterest",
+//      "contaminated": "true",
+//      "config": {
+//        "type": "random",
+//        "properties": {
+//          "building": "house"
+//        },
+//        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+//      },
+//      "direct_transition": "Terminal"
+//    },
     "Terminal": {
       "type": "Terminal"
     }
