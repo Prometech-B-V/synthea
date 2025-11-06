@@ -186,6 +186,14 @@ task graphviz(type: JavaExec) {
   mainClass = "Graphviz"
 }
 
+// Convenient task to run the Simulator API
+task runApi(type: JavaExec) {
+  group 'Application'
+  description 'Run the Synthea Simulator HTTP API'
+  classpath sourceSets.main.runtimeClasspath
+  mainClass = "org.mitre.synthea.simulator.Api"
+}
+
 tasks.javadoc {
     // Exclude the rif package
     exclude 'org/mitre/synthea/export/rif/**'
