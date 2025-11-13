@@ -1,0 +1,17 @@
+# VCS / IDE
+.git
+.gitignore
+.idea
+.vscode
+
+# Build outputs and caches
+build/
+.gradle/
+output/
+
+# Large geography datasets not needed to build the API image
+src/main/resources/geography/*.geojson
+src/main/resources/geography/export-fixed.geojson
+
+# OS noise
+.DS_Store

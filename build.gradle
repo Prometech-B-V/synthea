@@ -256,6 +256,36 @@ shadowJar {
   }
 }
 
+// Fat JAR for the Simulator API entrypoint
+tasks.register('shadowApi', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+  group 'Build'
+  description 'Assemble a runnable fat JAR for the Simulator API'
+  zip64 true
+  def versionFile = new File("$projectDir/src/main/resources/version.txt")
+  def versionText = versionFile.exists() ? versionFile.text.trim() : 'N/A'
+  transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer)
+  archiveClassifier.set('api')
+  archiveVersion.set('')
+  manifest {
+    attributes(
+      'Main-Class'     : 'org.mitre.synthea.simulator.Api',
+      'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+      'Build-Version'  : versionText,
+      'Created-By'     : "Gradle ${gradle.gradleVersion}",
+      'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+      'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
+    )
+  }
+  from sourceSets.main.output
+  configurations = [project.configurations.runtimeClasspath]
+}
+
+tasks.named('shadowApi').configure {
+  dependsOn versionTxt
+  dependsOn classes
+}
+
+
 task uberJar() {
 }
 
