@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-// TODO: Reduce claims and shit, don't really care about that.
+
 public class Api {
     public static void main(String[] args) throws Exception {
         // Preload all modules so first request doesn't pay the cost
