@@ -3,6 +3,10 @@
 FROM eclipse-temurin:11-jdk AS builder
 WORKDIR /workspace
 
+# Git is needed by synthea versionTxt task
+RUN apt-get update && \
+    apt-get install -y git
+
 # Leverage Gradle wrapper; copy minimal files first for better caching
 COPY gradlew gradlew
 COPY gradlew.bat gradlew.bat
@@ -19,17 +23,15 @@ COPY config ./config
 # Build the runnable fat JAR for the API
 RUN ./gradlew shadowApi
 
-# Sanity check: ensure Api.class exists in the fat jar
-RUN test -f build/libs/*-api.jar \
- && jar tf build/libs/*-api.jar | grep -q 'org/mitre/synthea/simulator/Api.class' \
- || (echo "Api.class missing from fat jar" && exit 1)
+# Unzip the JAR
+RUN (cd build/libs && jar -xf synthea-api.jar && rm synthea-api.jar)
 
 FROM eclipse-temurin:11-jre AS runtime
 WORKDIR /app
 
 # Copy the fat JAR produced by the shadowApi task
 # Be resilient to plugin naming: pick any JAR with the 'api' classifier
-COPY --from=builder /workspace/build/libs/*-api.jar /app/synthea-api.jar
+COPY --from=builder /workspace/build/libs /app/synthea-api
 
 EXPOSE 8080
 
@@ -37,4 +39,4 @@ EXPOSE 8080
 ENV JAVA_OPTS="-Xms512m -Xmx2g"
 
 # Run the API on port 8080
-ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -cp /app/synthea-api.jar org.mitre.synthea.simulator.Api"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -cp /app/synthea-api/ org.mitre.synthea.simulator.Api"]
