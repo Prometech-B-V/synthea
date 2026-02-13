@@ -30,7 +30,7 @@
       "symptoms": [
         {
           "name": "Fever",
-          "probability": 0.3,
+          "probability": 1,
           "codes": [
             {
               "system": "snomed",
@@ -41,7 +41,7 @@
         },
         {
           "name": "Cough",
-          "probability": 0.5,
+          "probability": 1,
           "codes": [
             {
               "system": "snomed",

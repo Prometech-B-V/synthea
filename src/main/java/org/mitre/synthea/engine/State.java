@@ -2943,6 +2943,7 @@ public abstract class State implements Cloneable, Serializable {
     public static class PointOfInterest extends State {
         private String type;
         private String label;
+        private String physicalType;
         private String poiName;
         private Boolean contaminated = false;
         private Boolean hasTiming;
@@ -2994,6 +2995,12 @@ public abstract class State implements Cloneable, Serializable {
                 this.durationConfig = config.get("duration").getAsJsonObject();
                 this.hasTiming = true;
             }
+
+            if (config.has("physicalType")) {
+                this.physicalType = config.get("physicalType").getAsString();
+            } else {
+                this.physicalType = "unknown";
+            }
         }
         // TODO: Fix the labels and the description when creating the point of interest.
         @Override
@@ -3001,7 +3008,7 @@ public abstract class State implements Cloneable, Serializable {
             JsonObject data;
             try {
                 // Instead of dealing with CSV we expect geojson
-                String jsonText = Utilities.readResource("geography/export.geojson");
+                String jsonText = Utilities.readResource("geography/export-fu;;.geojson");
                 Gson gson = Utilities.getGson();
                 data = gson.fromJson(jsonText, JsonObject.class);
             } catch (IOException e) {
@@ -3015,6 +3022,7 @@ public abstract class State implements Cloneable, Serializable {
             if (this.type.equals("random")) {
                 String label;
                 String name;
+                String physicalType;
                 JsonArray filtered;
 
                 if (this.properties != null && !this.properties.entrySet().isEmpty()) {
@@ -3067,12 +3075,18 @@ public abstract class State implements Cloneable, Serializable {
                     name = "unknown";
                 }
 
+                if (properties.has("physicalType")) {
+                    physicalType = properties.get("physicalType").getAsString();
+                } else {
+                    physicalType = "unknown";
+                }
+
                 poi = new org.mitre.synthea.world.geography.PointOfInterest(
-                        name, label, this.contaminated, properties
+                        name, label, physicalType, this.contaminated, properties
                 );
             } else if (this.type.equals("input")) {
                 poi = new org.mitre.synthea.world.geography.PointOfInterest(
-                        this.poiName, this.label, this.contaminated, properties
+                        this.poiName, this.label, this.physicalType, this.contaminated, properties
                 );
             } else {
                 throw new IllegalArgumentException("PointOfInterest state type must be 'random' or 'input'");

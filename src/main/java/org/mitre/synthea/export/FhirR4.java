@@ -3489,6 +3489,7 @@ public class FhirR4 {
         locationResource.setMeta(meta);
       }
       locationResource.setStatus(LocationStatus.ACTIVE);
+      locationResource.setPhysicalType(new CodeableConcept().setText(loc.physicalType));
       // use the label for name/description/type
       if (loc.label != null && !loc.label.isEmpty()) {
         locationResource.setName(loc.name);
@@ -3514,6 +3515,12 @@ public class FhirR4 {
                 period);
         locationResource.addExtension(periodExtension);
       }
+
+      Extension patientExtension = new Extension(
+              "http://example.org/fhir/StructureDefinition/patient-id",
+              new StringType(person.attributes.get(Person.ID).toString())
+      );
+      locationResource.addExtension(patientExtension);
 
       if (loc.properties != null) {
         for (Map.Entry<String, JsonElement> entry : loc.properties.entrySet()) {

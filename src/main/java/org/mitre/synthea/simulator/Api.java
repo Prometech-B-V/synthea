@@ -27,10 +27,10 @@ public class Api {
         int moduleCount = Module.getModules().size();
         System.out.println("Modules ready: " + moduleCount);
 
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(8081), 0);
         server.createContext("/casualty", new CasualtyHandler());
         server.setExecutor(null);
-        System.out.println("Synthea API server listening on http://localhost:8080");
+        System.out.println("Synthea API server listening on http://localhost:8081");
         server.start();
     }
 
@@ -55,6 +55,7 @@ public class Api {
             String gender = first(params, "gender"); // M or F
             String age = first(params, "age");       // minAge-maxAge
             String seed = first(params, "seed");     // long
+            String enabledModules = first(params, "modules");
 
             // Generate into an isolated temp directory and read back results
             Path tempOut;
@@ -106,6 +107,9 @@ public class Api {
                 }
                 if (city != null && !city.isBlank()) {
                     options.city = city;
+                }
+                if (enabledModules != null && !enabledModules.isBlank()) {
+                    options.enabledModules = List.of(enabledModules.split(","));
                 }
 
                 Generator generator = new Generator(options, exportOptions);

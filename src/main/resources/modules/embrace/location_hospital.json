@@ -1,0 +1,114 @@
+{
+  "name": "Hospital Embrace",
+  "gmfVersion": "1.0",
+  "specialty": "general",
+  "remarks": [],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "distributed_transition": [
+        { "transition": "Visit_location_AKH_Wien",     "distribution": 0.14285714285714285 },
+        { "transition": "Visit_location_Donaustadt",   "distribution": 0.14285714285714285 },
+        { "transition": "Visit_location_Favoriten",    "distribution": 0.14285714285714285 },
+        { "transition": "Visit_location_Floridsdorf",  "distribution": 0.14285714285714285 },
+        { "transition": "Visit_location_Hietzing",     "distribution": 0.14285714285714285 },
+        { "transition": "Visit_location_Landstrabe",   "distribution": 0.14285714285714285 },
+        { "transition": "Visit_location_Ottakring",    "distribution": 0.14285714285714285 }
+      ]
+    },
+    "Visit_location_AKH_Wien": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Universitätsklinikum AKH Wien",
+        "label": "Universitätsklinikum AKH Wien",
+        "physicalType": "hospital",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Terminal"
+    },
+    "Visit_location_Donaustadt": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Klinik Donaustadt",
+        "label": "Klinik Donaustadt",
+        "physicalType": "hospital",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Terminal"
+    },
+    "Visit_location_Favoriten": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Klinik Favoriten",
+        "label": "Klinik Favoriten",
+        "physicalType": "hospital",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Terminal"
+    },
+    "Visit_location_Floridsdorf": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Klinik Floridsdorf",
+        "label": "Klinik Floridsdorf",
+        "physicalType": "hospital",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Terminal"
+    },
+    "Visit_location_Hietzing": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Klinik Hietzing",
+        "label": "Klinik Hietzing",
+        "physicalType": "hospital",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Terminal"
+    },
+    "Visit_location_Landstrabe": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Klinik Landstraße",
+        "label": "Klinik Landstraße",
+        "physicalType": "hospital",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Terminal"
+    },
+    "Visit_location_Ottakring": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Klinik Ottakring",
+        "label": "Klinik Ottakring",
+        "physicalType": "hospital",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Embrace Complete",
+  "gmfVersion": "1.0",
+  "specialty": "general",
+  "remarks": [],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "direct_transition": "Call_Train_Location",
+      "name": "Initial"
+    },
+    "Call_Train_Location": {
+      "type": "CallSubmodule",
+      "submodule": "embrace/location_train",
+      "direct_transition": "Casualty_Ratio"
+    },
+    "Casualty_Ratio": {
+      "type": "Simple",
+      "distributed_transition": [
+        {
+          "distribution": 0.5,
+          "transition": "Call_Hospital_Location"
+        },
+        {
+          "distribution": 0.5,
+          "transition": "Terminal"
+        }
+      ]
+    },
+    "Call_Hospital_Location": {
+      "type": "CallSubmodule",
+      "submodule": "embrace/location_hospital",
+      "direct_transition": "Symptoms"
+    },
+    "Symptoms": {
+      "type": "Simple",
+      "distributed_transition": [
+        {
+          "distribution": 0.5,
+          "transition": "Call_Ricin_Submodule_Default"
+        },
+        {
+          "distribution": 0.5,
+          "transition": "Call_Ricin_Submodule_One_Symptom"
+        }
+      ]
+    },
+    "Call_Ricin_Submodule_Default": {
+      "type": "CallSubmodule",
+      "submodule": "embrace/ricin/default",
+      "direct_transition": "Terminal"
+    },
+    "Call_Ricin_Submodule_One_Symptom": {
+      "type": "CallSubmodule",
+      "submodule": "embrace/ricin/one_symptom",
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  }
+}

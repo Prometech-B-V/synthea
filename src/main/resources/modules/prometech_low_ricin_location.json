@@ -1,0 +1,140 @@
+{
+  "name": "Vienna Multi Hospital Ricin Poisoning",
+  "gmfVersion": "1.0",
+  "specialty": "general",
+  "remarks": [
+    "Samples multiple symptoms probabilistically and adds conditional observations."
+  ],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "direct_transition": "Wait_until",
+      "name": "Initial"
+    },
+    "Wait_until": {
+      "type": "WaitUntil",
+      "time": {
+        "date": "2025-10-02T12:48:00Z"
+      },
+      "distributed_transition": [
+        {
+          "distribution": 0.33,
+          "transition": "Visit_location_A"
+        },
+        {
+          "distribution": 0.33,
+          "transition": "Visit_location_B"
+        },
+        {
+          "distribution": 0.34,
+          "transition": "Visit_location_C"
+        }
+      ]
+    },
+    "Visit_location_A": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Hospital A",
+        "label": "Hospital A",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Ingestion"
+    },
+    "Visit_location_B": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Hospital B",
+        "label": "Hospital B",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Ingestion"
+    },
+    "Visit_location_C": {
+      "type": "PointOfInterest",
+      "contaminated": "true",
+      "config": {
+        "type": "input",
+        "name": "Hospital C",
+        "label": "Hospital C",
+        "start_time": { "value": 9, "unit": "hours" },
+        "duration":   { "min": 1, "max": 8, "unit": "minutes" }
+      },
+      "direct_transition": "Ingestion"
+    },
+    "Ingestion": {
+      "type": "ConditionOnset",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "216487004",
+          "display": "Accidental poisoning by plants"
+        }
+      ],
+      "direct_transition": "Onset_Delay"
+    },
+    "Onset_Delay": {
+      "type": "Delay",
+      "range": {
+        "low": 0.25,
+        "high": 10,
+        "unit": "hours"
+      },
+      "direct_transition": "Abdominal_Pain_Symptom"
+    },
+    "Abdominal_Pain_Symptom": {
+      "type": "Symptom",
+      "symptom": "abdominal pain",
+      "severity": 70,
+      "direct_transition": "Abdominal_Pain_Observation"
+    },
+    "Abdominal_Pain_Observation": {
+      "type": "Observation",
+      "codes": [
+        {
+          "system": "LOINC",
+          "code": "44833-2",
+          "display": "Abdominal pain severity",
+          "value_set": ""
+        }
+      ],
+      "value": 7,
+      "unit": "scale",
+      "direct_transition": "Presentation_Delay"
+    },
+    "Presentation_Delay": {
+      "type": "Delay",
+      "range": {
+        "low": 4,
+        "high": 20,
+        "unit": "hours"
+      },
+      "direct_transition": "ED_Encounter"
+    },
+    "ED_Encounter": {
+      "type": "Encounter",
+      "encounter_class": "emergency",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "50849002",
+          "display": "Emergency room admission"
+        }
+      ],
+      "direct_transition": "End_Encounter"
+    },
+    "End_Encounter": {
+      "type": "EncounterEnd",
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    }
+  },
+  "gmf_version": 2
+}
