@@ -3005,14 +3005,16 @@ public abstract class State implements Cloneable, Serializable {
         // TODO: Fix the labels and the description when creating the point of interest.
         @Override
         public boolean process(Person person, long time) {
-            JsonObject data;
+            JsonObject data = new JsonObject();
             try {
                 // Instead of dealing with CSV we expect geojson
-                String jsonText = Utilities.readResource("geography/export-fu;;.geojson");
+                String jsonText = Utilities.readResource("geography/export-full.geojson");
                 Gson gson = Utilities.getGson();
                 data = gson.fromJson(jsonText, JsonObject.class);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IllegalArgumentException | IOException e) {
+               if (this.type.equals("random")) {
+                   throw new RuntimeException("Could not read geography/export-full.geojson", e);
+               }
             }
 
             org.mitre.synthea.world.geography.PointOfInterest poi;

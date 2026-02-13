@@ -1,6 +1,6 @@
 import json
 
-with open("export-fu;;.geojson") as f:
+with open("export-full.geojson") as f:
     data = json.load(f)
     result = dict()
 
