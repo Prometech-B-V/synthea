@@ -1,0 +1,57 @@
+on:
+  push:
+    branches:
+      - palaestra
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: temurin
+
+      - name: Set image metadata
+        run: |
+          GRADLE_VERSION="$(./gradlew properties -q | awk -F': ' '$1 == "version" { print $2; exit }')"
+          if [ -n "$GRADLE_VERSION" ] && [ "$GRADLE_VERSION" != "unspecified" ]; then
+            PROJECT_VERSION="$GRADLE_VERSION"
+          else
+            PROJECT_VERSION="$(git describe --tags --always)"
+          fi
+          IMAGE_VERSION="$(printf '%s' "$PROJECT_VERSION" | sed 's/[^A-Za-z0-9_.-]/-/g')"
+          BRANCH_NAME="$(printf '%s' "$GITHUB_REF_NAME" | sed 's/[^A-Za-z0-9_.-]/-/g')"
+          echo "PROJECT_VERSION=${PROJECT_VERSION}" >> "$GITHUB_ENV"
+          echo "IMAGE_VERSION=${IMAGE_VERSION}" >> "$GITHUB_ENV"
+          echo "BRANCH_NAME=${BRANCH_NAME}" >> "$GITHUB_ENV"
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ghcr.io/prometech-b-v/synthea:${{ env.BRANCH_NAME }}-latest
+            ghcr.io/prometech-b-v/synthea:${{ env.BRANCH_NAME }}-${{ env.IMAGE_VERSION }}

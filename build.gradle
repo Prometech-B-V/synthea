@@ -3,7 +3,9 @@
  * can be found at https://docs.gradle.org/6.5/userguide/java_plugin.html
  */
 
-buildscript {
+version = "0.0.1"
+
+        buildscript {
   repositories {
     maven {
       url "https://plugins.gradle.org/m2/"
