@@ -24,12 +24,12 @@ jobs:
 
       - name: Set image metadata
         run: |
-          GRADLE_VERSION="$(./gradlew properties -q | awk -F': ' '$1 == "version" { print $2; exit }')"
-          if [ -n "$GRADLE_VERSION" ] && [ "$GRADLE_VERSION" != "unspecified" ]; then
-            PROJECT_VERSION="$GRADLE_VERSION"
-          else
-            PROJECT_VERSION="$(git describe --tags --always)"
+          GRADLE_VERSION="$(./gradlew properties --property version -q | awk -F': ' '$1 == "version" { print $2; exit }')"
+          if [ -z "$GRADLE_VERSION" ] || [ "$GRADLE_VERSION" = "unspecified" ]; then
+            echo "No Gradle project version is defined in build.gradle." >&2
+            exit 1
           fi
+          PROJECT_VERSION="$GRADLE_VERSION"
           IMAGE_VERSION="$(printf '%s' "$PROJECT_VERSION" | sed 's/[^A-Za-z0-9_.-]/-/g')"
           BRANCH_NAME="$(printf '%s' "$GITHUB_REF_NAME" | sed 's/[^A-Za-z0-9_.-]/-/g')"
           echo "PROJECT_VERSION=${PROJECT_VERSION}" >> "$GITHUB_ENV"

@@ -10,8 +10,8 @@ build/
 output/
 
 # Large geography datasets not needed to build the API image
-src/main/resources/geography/*.geojson
-src/main/resources/geography/export-fixed.geojson
+#src/main/resources/geography/*.geojson
+#src/main/resources/geography/export-fixed.geojson
 
 # OS noise
 .DS_Store
