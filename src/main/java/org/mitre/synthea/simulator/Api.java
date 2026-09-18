@@ -55,6 +55,7 @@ public class Api {
             String gender = first(params, "gender"); // M or F
             String age = first(params, "age");       // minAge-maxAge
             String seed = first(params, "seed");     // long
+            List<String> modules = parseModules(params);
 
             // Generate into an isolated temp directory and read back results
             Path tempOut;
@@ -106,6 +107,9 @@ public class Api {
                 }
                 if (city != null && !city.isBlank()) {
                     options.city = city;
+                }
+                if (modules != null) {
+                    options.enabledModules = modules;
                 }
 
                 Generator generator = new Generator(options, exportOptions);
@@ -197,6 +201,23 @@ public class Api {
             String v = first(params, key);
             if (v == null) return def;
             try { return Integer.parseInt(v); } catch (NumberFormatException e) { return def; }
+        }
+
+        static List<String> parseModules(Map<String, List<String>> params) {
+            List<String> values = params.get("modules");
+            if (values == null) {
+                return null;
+            }
+
+            List<String> modules = new ArrayList<>();
+            for (String value : values) {
+                for (String module : value.split(",")) {
+                    if (!module.isBlank()) {
+                        modules.add(module.trim());
+                    }
+                }
+            }
+            return modules;
         }
 
         private static String first(Map<String, List<String>> params, String key) {

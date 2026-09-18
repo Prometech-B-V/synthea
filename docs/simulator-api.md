@@ -38,6 +38,8 @@ The server generates data into a unique temporary folder per request by forcing 
   - `gender` (string): `M` or `F`.
   - `age` (string): range `min-max`, e.g., `30-40`.
   - `seed` (long): random seed for repeatability.
+  - `modules` (string): comma-separated module names or wildcard patterns to enable, e.g.,
+    `hypertension,asthma,allerg*`. May be repeated. Core modules always run.
   - Any Synthea config key (parameters containing a dot) to override at runtime, for example:
     - `exporter.fhir.transaction_bundle=false`
     - `exporter.pretty_print=false`
@@ -54,6 +56,9 @@ Notes
 
 - Generate female patients aged 30–40 with fixed seed:
   - `curl "http://localhost:8080/casualty?count=3&gender=F&age=30-40&seed=12345"`
+
+- Generate patients using only a smaller set of disease modules:
+  - `curl "http://localhost:8080/casualty?count=10&modules=hypertension,asthma,allerg*"`
 
 - Disable FHIR transaction bundles and pretty printing via config overrides:
   - `curl "http://localhost:8080/casualty?count=2&exporter.fhir.transaction_bundle=false&exporter.pretty_print=false"`
@@ -97,6 +102,7 @@ The server maps parameters to Synthea’s `GeneratorOptions`:
 - `gender` → `gender` (`M` or `F`)
 - `age` → `minAge`/`maxAge` with `ageSpecified = true`
 - `seed` → `seed`
+- `modules` → `enabledModules` (comma-separated names or wildcard patterns)
 
 Additionally, any parameter containing a `.` is treated as a direct `Config.set(key, value)` override. The server always sets `exporter.baseDirectory` to a per-request temporary directory.
 
